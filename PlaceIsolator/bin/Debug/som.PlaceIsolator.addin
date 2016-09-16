@@ -1,0 +1,11 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<RevitAddIns>
+  <AddIn Type="Application">
+    <Name>PlaceIsolator Application </Name>
+    <Assembly>PlaceIsolator.dll</Assembly>
+    <FullClassName>SOM.RevitTools.PlaceIsolator.App</FullClassName>
+    <ClientId>5dd9b5ea-ecd4-4a5e-8796-97af7e3c621f</ClientId>
+    <VendorId>Danny Bentley</VendorId>
+    <VendorDescription>danny.bentley@som.com</VendorDescription>
+  </AddIn>
+</RevitAddIns>

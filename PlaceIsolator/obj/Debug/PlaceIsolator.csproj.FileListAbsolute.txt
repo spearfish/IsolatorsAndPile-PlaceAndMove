@@ -1,0 +1,12 @@
+F:\00-PROGRAMMING SOM\PlaceIsolator\PlaceIsolator\bin\Debug\som.PlaceIsolator.addin
+F:\00-PROGRAMMING SOM\PlaceIsolator\PlaceIsolator\bin\Debug\PlaceIsolator.dll
+F:\00-PROGRAMMING SOM\PlaceIsolator\PlaceIsolator\bin\Debug\PlaceIsolator.pdb
+F:\00-PROGRAMMING SOM\PlaceIsolator\PlaceIsolator\bin\Debug\EPPlus.dll
+F:\00-PROGRAMMING SOM\PlaceIsolator\PlaceIsolator\bin\Debug\EPPlus.xml
+F:\00-PROGRAMMING SOM\PlaceIsolator\PlaceIsolator\obj\Debug\PlaceIsolator.csprojResolveAssemblyReference.cache
+F:\00-PROGRAMMING SOM\PlaceIsolator\PlaceIsolator\obj\Debug\PlaceIsolator.dll
+F:\00-PROGRAMMING SOM\PlaceIsolator\PlaceIsolator\obj\Debug\PlaceIsolator.pdb
+F:\00-PROGRAMMING SOM\PlaceIsolator\PlaceIsolator\obj\Debug\Window_UI.baml
+F:\00-PROGRAMMING SOM\PlaceIsolator\PlaceIsolator\obj\Debug\Window_UI.g.cs
+F:\00-PROGRAMMING SOM\PlaceIsolator\PlaceIsolator\obj\Debug\PlaceIsolator_MarkupCompile.cache
+F:\00-PROGRAMMING SOM\PlaceIsolator\PlaceIsolator\obj\Debug\PlaceIsolator.g.resources
