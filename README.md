@@ -5,6 +5,8 @@ The Revit family I've build is a floor base hosted family.  You must pick the fl
 
 The plan for this project leverage points data to locate base isolators in Revit through an Excel file.  The points generated my come from AutoCAD, Etabs or Rhino. 
 
+[Youtube Video](https://www.youtube.com/watch?v=pMbzzR3HuDI&list=PLlyMZ5IcKcciQwUdE9H1m_sjdoTtXvcGY&index=2)
+
 Keywords: Revit, AutoCAD, Etabs, Rhino
 
 ## Installation
