@@ -36,8 +36,8 @@ namespace SOM.RevitTools.PlaceIsolator
                             objIsolator.X = WorkSheets.Cells[row, col].Text;
                         if (col == 3)
                             objIsolator.Y = WorkSheets.Cells[row, col].Text;
-                        //if (col == 4)
-                            //objIsolator.R = WorkSheets.Cells[row, col].Text;
+                        if (col == 4)
+                            objIsolator.R = WorkSheets.Cells[row, col].Text;
                         if (col == 5)
                             objIsolator.ID = WorkSheets.Cells[row, col].Text;
                     }

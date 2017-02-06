@@ -85,12 +85,9 @@ namespace SOM.RevitTools.PlaceIsolator
             string xCoord = Isolator.X;
             string yCoord = Isolator.Y;
             // Rotation
-            //string rotation = Isolator.R;
-            //XY convert to double and divide by 12. 
+            string rotation = Isolator.R;
             double x = double.Parse(xCoord) / 12;
             double y = double.Parse(yCoord) / 12;
-            //double x = lib.MmToFoot(double.Parse(xCoord));
-            //double y = lib.MmToFoot(double.Parse(yCoord));
 
             // Identification 
             string id = Isolator.ID;
@@ -106,7 +103,7 @@ namespace SOM.RevitTools.PlaceIsolator
 
             // Convert coordinates to double and create XYZ point.
 
-            //double r = double.Parse(rotation);
+            double r = double.Parse(rotation);
             XYZ xyz = new XYZ(x, y, level.Elevation);
             XYZ xyz_A = new XYZ(x, y, level.Elevation + 2);
             Line axis = Line.CreateBound(xyz, xyz_A);
@@ -129,7 +126,7 @@ namespace SOM.RevitTools.PlaceIsolator
                 //FamilyInstance IsolatorInstance = doc.Create.NewFamilyInstance(xyz, familySymbol, hostedElement, level, StructuralType.Footing);
 
                 // Rotate family elmement
-                //IsolatorInstance.Location.Rotate(axis, r);
+                IsolatorInstance.Location.Rotate(axis, r);
 
                 // Parameter ID for tracking (MUST ADD PARAMETER TO PROJECT)
                 Parameter SOMIDParam = IsolatorInstance.LookupParameter("SOM ID");
@@ -158,8 +155,8 @@ namespace SOM.RevitTools.PlaceIsolator
             // Rotation
             string rotation = Isolator.R;
 
-            double New_x = lib.MmToFoot(double.Parse(xCoord));
-            double New_y = lib.MmToFoot(double.Parse(yCoord));
+            double New_x = double.Parse(xCoord) / 12;
+            double New_y = double.Parse(yCoord) / 12;
             double New_Rotation = double.Parse(rotation);
 
             XYZ New_xyz = new XYZ(New_x, New_y, level.Elevation);
@@ -168,7 +165,9 @@ namespace SOM.RevitTools.PlaceIsolator
 
             double Move_X = New_x - oldPlace.X;
             double Move_Y = New_y - oldPlace.Y;
-            double Rotate = New_Rotation - Old_Rotation;
+            double Rotate = 0;
+            if(New_Rotation != null) 
+                Rotate = New_Rotation - Old_Rotation;
 
             // Move the element to new location.
             XYZ new_xyz = new XYZ(Move_X, Move_Y, level.Elevation);
