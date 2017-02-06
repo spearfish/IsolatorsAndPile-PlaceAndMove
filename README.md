@@ -11,9 +11,9 @@ Keywords: Revit, AutoCAD, Etabs, Rhino
 Copy .dll file and .addin to the [Revit Add-Ins folder](http://help.autodesk.com/view/RVT/2015/ENU/?guid=GUID-4FFDB03E-6936-417C-9772-8FC258A261F7).
 Also look at my [DBLibrary](https://github.com/dannysbentley/DBLibrary) for missing methods. 
 
-Under the sample file folder:
-Sample Revit family which works with the project. 
-Sample Excel file formatted to work with project. 
+-Under the sample file folder:
+-Sample Revit family which works with the project. 
+-Sample Excel file formatted to work with project. 
 
 ## Usage
 
