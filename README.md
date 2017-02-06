@@ -12,7 +12,9 @@ Copy .dll file and .addin to the [Revit Add-Ins folder](http://help.autodesk.com
 Also look at my [DBLibrary](https://github.com/dannysbentley/DBLibrary) for missing methods. 
 
 Under the sample file folder:
+
 Sample Revit family which works with the project. 
+
 Sample Excel file formatted to work with project. 
 
 ## Usage
