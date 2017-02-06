@@ -8,26 +8,26 @@ using Autodesk.Revit.DB;
 using Autodesk.Revit.UI;
 using System.Linq;
 using Autodesk.Revit.DB.Structure;
+using DBLibrary;
+using Autodesk.Revit.UI.Selection;
+using Autodesk.Revit.ApplicationServices;
 
 namespace SOM.RevitTools.PlaceIsolator
 {
     class program
     {
         //*****************************porgramIsolator()*****************************
-        public string porgramIsolator(UIApplication uiApp, Document doc, UIDocument uiDocument, 
+        public string porgramIsolator(UIApplication uiApp, Document doc, UIDocument uiDocument,
                                   IsoObj Isolator, string SelectedLevel, Dictionary<string, Element> dictionary)
         {
             try
             {
-                string fsFamilyName = "Footing-Rectangular";
-                string fsFamilyType = "F1";
+                // Family name and type being used. 
+                string fsFamilyName = "BASE ISOLATOR - (I SF)";
+                string fsFamilyType = "TYPE 1";
                 // Selected level 
                 string levelName = SelectedLevel;
-                // XY 
-                string xCoord = Isolator.X;
-                string yCoord = Isolator.Y;
-                // Rotation 
-                string rotation = Isolator.R;
+
                 // Identification 
                 string id = Isolator.ID;
 
@@ -41,7 +41,7 @@ namespace SOM.RevitTools.PlaceIsolator
                 // If dictioary doesn't contian element it will create a new one. 
                 else
                 {
-                    // LINQ lambda expression  to compare parameter. 
+                    // Method to create family. 
                     Create_BaseIsolator(uiDocument, doc, fsFamilyName,
                                         fsFamilyType, levelName, Isolator);
                 }
@@ -57,6 +57,7 @@ namespace SOM.RevitTools.PlaceIsolator
         //*****************************Get_ElementAndParamValues()*****************************
         public Dictionary<string, Element> Get_ElementAndParamValues(Document doc)
         {
+            LibraryGetItems library = new LibraryGetItems();
             // Get Structural foundation elements 
             FilteredElementCollector dcs = new FilteredElementCollector(doc).OfClass(typeof(FamilyInstance))
                 .OfCategory(BuiltInCategory.OST_StructuralFoundation);
@@ -66,9 +67,9 @@ namespace SOM.RevitTools.PlaceIsolator
 
             foreach (Element dc in dcs)
             {
-                // Get Parameter using builtin but will need GUID for shared Parametere. 
-                Parameter comment = dc.get_Parameter(BuiltInParameter.ALL_MODEL_INSTANCE_COMMENTS);
-                string parameterVaule = GetParameterValue(comment);
+                // Get SOM ID parameter. 
+                var SOMIDParam = dc.LookupParameter("SOM ID");
+                string parameterVaule = library.GetParameterValue(SOMIDParam);
 
                 d.Add(parameterVaule, dc);
             }
@@ -83,10 +84,13 @@ namespace SOM.RevitTools.PlaceIsolator
             string xCoord = Isolator.X;
             string yCoord = Isolator.Y;
             // Rotation
-            string rotation = Isolator.R;
+            //string rotation = Isolator.R;
             //XY convert to double and divide by 12. 
             double x = double.Parse(xCoord) / 12;
             double y = double.Parse(yCoord) / 12;
+            //double x = lib.MmToFoot(double.Parse(xCoord));
+            //double y = lib.MmToFoot(double.Parse(yCoord));
+
             // Identification 
             string id = Isolator.ID;
 
@@ -100,8 +104,8 @@ namespace SOM.RevitTools.PlaceIsolator
             Level level = GetLevel(doc, levelName);
 
             // Convert coordinates to double and create XYZ point.
-            
-            double r = double.Parse(rotation);
+
+            //double r = double.Parse(rotation);
             XYZ xyz = new XYZ(x, y, level.Elevation);
             XYZ xyz_A = new XYZ(x, y, level.Elevation + 2);
             Line axis = Line.CreateBound(xyz, xyz_A);
@@ -120,15 +124,15 @@ namespace SOM.RevitTools.PlaceIsolator
                 }
 
                 // Create Base Isolator. 
-                // create a family to selected level
                 FamilyInstance IsolatorInstance = doc.Create.NewFamilyInstance(xyz, familySymbol, level, StructuralType.Footing);
+                //FamilyInstance IsolatorInstance = doc.Create.NewFamilyInstance(xyz, familySymbol, hostedElement, level, StructuralType.Footing);
+
                 // Rotate family elmement
-                IsolatorInstance.Location.Rotate(axis, r);
-                // Parameter ID for future coordination. 
-                // Use Parameter
-                var DynamoID = IsolatorInstance.LookupParameter("Comments");
-                // Set Parameter 
-                DynamoID.Set(id).ToString();
+                //IsolatorInstance.Location.Rotate(axis, r);
+
+                // Parameter ID for tracking (MUST ADD PARAMETER TO PROJECT)
+                Parameter SOMIDParam = IsolatorInstance.LookupParameter("SOM ID");
+                SOMIDParam.Set(id).ToString();
 
                 t.Commit();
             }
@@ -139,6 +143,7 @@ namespace SOM.RevitTools.PlaceIsolator
         {
             // get the column current location
             LocationPoint InstanceLocation = element.Location as LocationPoint;
+            LibraryConvertUnits lib = new LibraryConvertUnits();
 
             XYZ oldPlace = InstanceLocation.Point;
             double Old_Rotation = InstanceLocation.Rotation;
@@ -152,9 +157,8 @@ namespace SOM.RevitTools.PlaceIsolator
             // Rotation
             string rotation = Isolator.R;
 
-            //XY convert to double and divide by 12. 
-            double New_x = double.Parse(xCoord) / 12;
-            double New_y = double.Parse(yCoord) / 12;
+            double New_x = lib.MmToFoot(double.Parse(xCoord));
+            double New_y = lib.MmToFoot(double.Parse(yCoord));
             double New_Rotation = double.Parse(rotation);
 
             XYZ New_xyz = new XYZ(New_x, New_y, level.Elevation);
@@ -173,7 +177,7 @@ namespace SOM.RevitTools.PlaceIsolator
             t.Start("Move Element");
 
             ElementTransformUtils.MoveElement(doc, element.Id, new_xyz);
-            ElementTransformUtils.RotateElement(doc,element.Id, New_Axis, Rotate);
+            ElementTransformUtils.RotateElement(doc, element.Id, New_Axis, Rotate);
 
             t.Commit();
         }
@@ -192,7 +196,7 @@ namespace SOM.RevitTools.PlaceIsolator
 
         //*****************************GetParameterValue()*****************************
         /// get parameter's value
-        public static string GetParameterValue(Parameter parameter) 
+        public static string GetParameterValue(Parameter parameter)
         //public static Object GetParameterValue(Parameter parameter)
         {
             switch (parameter.StorageType)

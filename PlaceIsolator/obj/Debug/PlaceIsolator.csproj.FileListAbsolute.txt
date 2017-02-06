@@ -10,3 +10,7 @@ F:\00-PROGRAMMING SOM\PlaceIsolator\PlaceIsolator\obj\Debug\Window_UI.baml
 F:\00-PROGRAMMING SOM\PlaceIsolator\PlaceIsolator\obj\Debug\Window_UI.g.cs
 F:\00-PROGRAMMING SOM\PlaceIsolator\PlaceIsolator\obj\Debug\PlaceIsolator_MarkupCompile.cache
 F:\00-PROGRAMMING SOM\PlaceIsolator\PlaceIsolator\obj\Debug\PlaceIsolator.g.resources
+F:\00-PROGRAMMING SOM\PlaceIsolator\PlaceIsolator\bin\Debug\00-RevitLibrary.dll
+F:\00-PROGRAMMING SOM\PlaceIsolator\PlaceIsolator\bin\Debug\00-RevitLibrary.pdb
+F:\00-PROGRAMMING SOM\PlaceIsolator\PlaceIsolator\bin\Debug\DBLibrary.dll
+F:\00-PROGRAMMING SOM\PlaceIsolator\PlaceIsolator\bin\Debug\DBLibrary.pdb

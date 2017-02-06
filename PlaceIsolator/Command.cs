@@ -30,15 +30,18 @@ namespace SOM.RevitTools.PlaceIsolator
 
             ExcelReader Excel = new ExcelReader();
             program Program = new program();
+            // List for isolators 
             List<IsoObj> List_Isolators = new List<IsoObj>();
+            // User Interface window
             Window_UI window = new Window_UI();
 
-
+            // Add all levels to the UI to be picked. 
             window.LevelComboBox.ItemsSource = getLevels(doc);
             var res = window.ShowDialog();
-            //Check if user clicked "OK" button, "Cancel" button or "Clear" button
-            if (!(res.HasValue && res.Value)) return Result.Cancelled;
 
+            // Check if user clicked "OK" button, "Cancel" button or "Clear" button
+            if (!(res.HasValue && res.Value)) return Result.Cancelled;
+            // Selected level and file.
             string SelectedLevel = window.LevelComboBox.Text;
             string Filepath = window._Filepath;
 
@@ -52,6 +55,8 @@ namespace SOM.RevitTools.PlaceIsolator
 
             }
             catch { }
+
+            
 
             foreach (IsoObj Isolator in List_Isolators)
             {
