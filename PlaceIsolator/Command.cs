@@ -55,14 +55,13 @@ namespace SOM.RevitTools.PlaceIsolator
 
             }
             catch { }
-
-            
-
+            // CREATE AND MOVE ISOLATORS. 
             foreach (IsoObj Isolator in List_Isolators)
             {
                 Program.porgramIsolator(uiapp, doc, uidoc, Isolator, SelectedLevel, dictionary);
             }
-
+            // REMOVE ELEMENTS
+            Program.RemoveElement(doc, dictionary, List_Isolators);
             return Result.Succeeded;
         }
 

@@ -1,16 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
-using System.Diagnostics;
-using System.IO;
-using Autodesk.Revit;
 using Autodesk.Revit.DB;
 using Autodesk.Revit.UI;
 using System.Linq;
 using Autodesk.Revit.DB.Structure;
 using DBLibrary;
-using Autodesk.Revit.UI.Selection;
-using Autodesk.Revit.ApplicationServices;
 
 namespace SOM.RevitTools.PlaceIsolator
 {
@@ -20,17 +14,17 @@ namespace SOM.RevitTools.PlaceIsolator
         public string porgramIsolator(UIApplication uiApp, Document doc, UIDocument uiDocument,
                                   IsoObj Isolator, string SelectedLevel, Dictionary<string, Element> dictionary)
         {
+            // Family name and type being used. 
+            string fsFamilyName = "BASE ISOLATOR - (I SF)";
+            string fsFamilyType = "TYPE 1";
+            // Selected level 
+            string levelName = SelectedLevel;
+
+            // Identification 
+            string id = Isolator.ID;
+
             try
             {
-                // Family name and type being used. 
-                string fsFamilyName = "BASE ISOLATOR - (I SF)";
-                string fsFamilyType = "TYPE 1";
-                // Selected level 
-                string levelName = SelectedLevel;
-
-                // Identification 
-                string id = Isolator.ID;
-
                 //Test to see if the dictionary contains the Element 
                 if (dictionary.ContainsKey(id))
                 {
@@ -51,6 +45,8 @@ namespace SOM.RevitTools.PlaceIsolator
                 string message = e.Message;
                 return Result.Failed.ToString();
             }
+            
+
             return Result.Succeeded.ToString();
         }
 
@@ -67,11 +63,16 @@ namespace SOM.RevitTools.PlaceIsolator
 
             foreach (Element dc in dcs)
             {
-                // Get SOM ID parameter. 
-                var SOMIDParam = dc.LookupParameter("SOM ID");
-                string parameterVaule = library.GetParameterValue(SOMIDParam);
-
-                d.Add(parameterVaule, dc);
+                try
+                {
+                    // Get SOM ID parameter. 
+                    var SOMIDParam = dc.LookupParameter("SOM ID");
+                    string parameterVaule = library.GetParameterValue(SOMIDParam);
+                    //Only add elements with id values. 
+                    if (parameterVaule != null)
+                        d.Add(parameterVaule, dc);
+                }
+                catch { }
             }
             return d;
         }
@@ -180,6 +181,36 @@ namespace SOM.RevitTools.PlaceIsolator
             ElementTransformUtils.RotateElement(doc, element.Id, New_Axis, Rotate);
 
             t.Commit();
+        }
+
+        //*****************************RemoveElement()*****************************
+        public void RemoveElement(Document doc, Dictionary<string, Element> dictionary, List<IsoObj> List_ExcelIsolators)
+        {
+            // iterate through the dictionary. 
+            foreach (KeyValuePair<string, Element> entry in dictionary)
+            {
+                string key = entry.Key;
+                Element e = entry.Value;
+                //search for element id parameter
+                IsoObj elementFound = List_ExcelIsolators.Find(x => x.ID == key);
+                // if the element id isn't found it will delete element. 
+                if (elementFound == null)
+                {
+                    try
+                    {
+                        using (Transaction t = new Transaction(doc))
+                        {
+                            t.Start("Remove Element");
+                            doc.Delete(e.Id);
+                            t.Commit();
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        string ErrMessage = ex.Message;
+                    }
+                }
+            }
         }
 
         //*****************************GetLevel()*****************************
